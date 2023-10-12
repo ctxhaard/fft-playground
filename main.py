@@ -19,29 +19,33 @@ def main():
     x += wave(90, 1, np.pi/2)
     x += wave(100, 1)
 
-    x = x * np.hanning( x.size )
+    window = np.hanning( x.size )
+    x = x * window
 
     plt.figure(figsize=(12, 6))
-    plt.subplot(131)
+
+    plt.subplot(221)
     plt.ylabel('Amplitude')
     plt.plot(t, x, 'r')
 
-    
+    plt.subplot(222)
+    plt.ylabel('Window')
+    plt.plot(t, window, 'r')
 
     X = np.fft.fft(x) # the FFT
     N = len(X) # the bins number
     n = np.arange(N) # the bin indexes
-    T = N/sr # the sampling period
+    freq = np.fft.fftfreq(N, ts) # N/sr # the sampling period
     
-    freq = n/T # the sampling frequencies
+    #freq = n/T # the sampling frequencies
 
-    plt.subplot(132)
+    plt.subplot(223)
     plt.stem(freq, np.abs(X), 'b', markerfmt=' ', basefmt='-b')
     plt.xlabel('Freq (Hz)')
     plt.ylabel('FFT Amplitude |X(freq)')
     plt.xlim(0, 200)
 
-    plt.subplot(133)
+    plt.subplot(224)
     plt.stem(freq, np.angle(X), 'b', markerfmt=' ', basefmt='-b')
     plt.xlabel('Freq (Hz)')
     plt.ylabel('Phase')
